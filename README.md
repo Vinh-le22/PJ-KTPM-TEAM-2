@@ -28,15 +28,15 @@ Dự án **Quản lý Thư viện** là một ứng dụng web xây dựng bằn
    git clone <đường dẫn repo>
    cd library_project
 2. Chạy migration để tạo database và bảng:
-
+   ```bash
     python manage.py makemigrations
     python manage.py migrate
 3. Tạo user admin (quản trị viên):
-    
+    ```bash
     python manage.py createsuperuser
 
 4. Chạy server:
-
+   ```bash
     python manage.py runserver
 
 5. Truy cập ứng dụng tại: http://127.0.0.1:8000
