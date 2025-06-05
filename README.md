@@ -25,7 +25,7 @@ Dự án **Quản lý Thư viện** là một ứng dụng web xây dựng bằn
 
 1. Clone dự án về máy:
    ```bash
-   git clone <đường dẫn repo>
+   git clone https://github.com/Vinh-le22/PJ-KTPM-TEAM-2.git
    cd library_project
 2. Chạy migration để tạo database và bảng:
    ```bash
