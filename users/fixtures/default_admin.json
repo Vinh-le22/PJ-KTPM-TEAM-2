@@ -1,0 +1,20 @@
+[
+    {
+        "model": "auth.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$abcdefghijklmnopqrstuvwx$1234567890abcdefghijklmnopqrstuvwxyz=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "admin",
+            "first_name": "Admin",
+            "last_name": "System",
+            "email": "admin@library.com",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2025-06-06T00:00:00Z",
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+] 
