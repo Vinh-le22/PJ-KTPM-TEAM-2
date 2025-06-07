@@ -27,9 +27,12 @@
                         <div class="col-md-4 fw-bold">Email:</div>
                         <div class="col-md-8">{{ user.email|default:"Chưa cập nhật" }}</div>
                     </div>
-                    <div class="d-grid gap-2">
-                        <a href="{% url 'edit_profile' %}" class="btn btn-primary">
+                    <div class="d-grid gap-2 d-md-flex">
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary flex-grow-1">
                             <i class="fas fa-edit me-2"></i>Chỉnh sửa thông tin
+                        </a>
+                        <a href="{% url 'change_password' %}" class="btn btn-warning flex-grow-1">
+                            <i class="fas fa-key me-2"></i>Đổi mật khẩu
                         </a>
                     </div>
                 </div>

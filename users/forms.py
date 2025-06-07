@@ -1,6 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
+from django.utils.translation import gettext_lazy as _
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(
@@ -81,4 +82,41 @@ class UserProfileForm(forms.ModelForm):
             'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập tên của bạn'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập họ của bạn'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Nhập email của bạn'})
-        } 
+        }
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label=_('Mật khẩu hiện tại'),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nhập mật khẩu hiện tại'
+        })
+    )
+    new_password1 = forms.CharField(
+        label=_('Mật khẩu mới'),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nhập mật khẩu mới'
+        }),
+        help_text=_('Mật khẩu phải có ít nhất 8 ký tự và không được quá đơn giản.')
+    )
+    new_password2 = forms.CharField(
+        label=_('Xác nhận mật khẩu mới'),
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Nhập lại mật khẩu mới'
+        })
+    )
+
+    def clean_old_password(self):
+        old_password = self.cleaned_data.get('old_password')
+        if not self.user.check_password(old_password):
+            raise forms.ValidationError(_('Mật khẩu hiện tại không chính xác.'))
+        return old_password
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError(_('Mật khẩu mới không khớp.'))
+        return password2 

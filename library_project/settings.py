@@ -63,7 +63,7 @@ DATABASES = {
 # Internationalization
 LANGUAGE_CODE = 'vi'
 
-TIME_ZONE = 'Asia/Ho_Chi_Minh'
+TIME_ZONE = 'Asia/Ha_Noi'
 
 USE_I18N = True
 

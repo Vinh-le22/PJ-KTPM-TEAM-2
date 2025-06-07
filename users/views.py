@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
-from .forms import UserRegisterForm, UserLoginForm, UserProfileForm
+from .forms import UserRegisterForm, UserLoginForm, UserProfileForm, CustomPasswordChangeForm
 from .messages import (
     LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT_SUCCESS,
     REGISTER_SUCCESS, REGISTER_ERROR,
@@ -63,3 +63,20 @@ def edit_profile_view(request):
     else:
         form = UserProfileForm(instance=request.user)
     return render(request, 'users/edit_profile.html', {'form': form})
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        form = CustomPasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, PASSWORD_CHANGE_SUCCESS)
+            return redirect('profile')
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{form.fields[field].label}: {error}")
+    else:
+        form = CustomPasswordChangeForm(request.user)
+    return render(request, 'users/change_password.html', {'form': form})
