@@ -6,6 +6,7 @@
 - pip (Python package manager)
 - Git
 - Trình duyệt web hiện đại (Chrome, Firefox, Edge...)
+- Pillow (thư viện xử lý ảnh)
 
 ## Cài đặt
 
@@ -21,6 +22,7 @@ python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 pip install -r requirements.txt
+pip install Pillow  # Cài đặt Pillow để xử lý ảnh
 ```
 
 3. Chạy migrations:
@@ -93,6 +95,7 @@ library_project/
 
 ### Quản lý sách (books app)
 - Thêm/sửa/xóa sách
+- Thêm ảnh bìa sách
 - Tìm kiếm sách theo tên, tác giả
 - Phân loại sách theo thể loại
 

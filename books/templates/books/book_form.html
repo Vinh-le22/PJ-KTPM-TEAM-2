@@ -9,7 +9,7 @@
                     <h3 class="card-title mb-0">{{ action }} sách</h3>
                 </div>
                 <div class="card-body">
-                    <form method="post" class="needs-validation" novalidate>
+                    <form method="post" class="needs-validation" novalidate enctype="multipart/form-data">
                         {% csrf_token %}
                         
                         <div class="mb-3">
@@ -69,6 +69,19 @@
                             <div class="invalid-feedback d-block">
                                 {{ form.total_copies.errors }}
                             </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ form.cover_image.id_for_label }}" class="form-label">{{ form.cover_image.label }}</label>
+                            {{ form.cover_image }}
+                            {% if form.cover_image.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.cover_image.errors }}
+                            </div>
+                            {% endif %}
+                            {% if form.instance.cover_image %}
+                            <small class="form-text text-muted">Ảnh hiện tại: <a href="{{ form.instance.cover_image.url }}" target="_blank">Xem ảnh</a></small>
                             {% endif %}
                         </div>
 

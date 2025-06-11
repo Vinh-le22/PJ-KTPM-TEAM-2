@@ -12,7 +12,7 @@ class BookForm(forms.ModelForm):
 
     class Meta:
         model = Book
-        fields = ['title', 'category', 'description', 'publication_year', 'total_copies']
+        fields = ['title', 'category', 'description', 'publication_year', 'total_copies', 'cover_image']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -36,6 +36,10 @@ class BookForm(forms.ModelForm):
                 'class': 'form-control',
                 'placeholder': 'Nhập số lượng sách',
                 'min': 1
+            }),
+            'cover_image': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': 'image/*'
             })
         }
         labels = {
@@ -43,7 +47,8 @@ class BookForm(forms.ModelForm):
             'category': 'Thể loại',
             'description': 'Mô tả',
             'publication_year': 'Năm xuất bản',
-            'total_copies': 'Số lượng'
+            'total_copies': 'Số lượng',
+            'cover_image': 'Ảnh bìa'
         }
 
     def __init__(self, *args, **kwargs):

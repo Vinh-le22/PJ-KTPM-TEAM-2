@@ -48,7 +48,7 @@ def book_detail(request, pk):
 @user_passes_test(is_admin)
 def book_create(request):
     if request.method == 'POST':
-        form = BookForm(request.POST)
+        form = BookForm(request.POST, request.FILES)
         if form.is_valid():
             book = form.save()
             messages.success(request, 'Sách đã được thêm thành công!')
@@ -61,7 +61,7 @@ def book_create(request):
 def book_edit(request, pk):
     book = get_object_or_404(Book, pk=pk)
     if request.method == 'POST':
-        form = BookForm(request.POST, instance=book)
+        form = BookForm(request.POST, request.FILES, instance=book)
         if form.is_valid():
             book = form.save()
             messages.success(request, 'Sách đã được cập nhật thành công!')

@@ -34,6 +34,7 @@ class Book(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, related_name='books')
     description = models.TextField()
+    cover_image = models.ImageField(upload_to='book_covers/', null=True, blank=True)
     publication_year = models.PositiveIntegerField(null=True, blank=True)
     isbn = models.CharField(max_length=13, blank=True, null=True, unique=True)
     total_copies = models.PositiveIntegerField(default=1)
