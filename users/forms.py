@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(
@@ -50,7 +51,7 @@ class UserRegisterForm(UserCreationForm):
             'password_mismatch': 'Mật khẩu xác nhận không khớp.'
         }
 
-class UserLoginForm(forms.Form):
+class UserLoginForm(AuthenticationForm):
     username = forms.CharField(
         label='Tên đăng nhập',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nhập tên đăng nhập'})
@@ -68,6 +69,19 @@ class UserLoginForm(forms.Form):
         self.fields['password'].error_messages = {
             'required': 'Vui lòng nhập mật khẩu.'
         }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        password = cleaned_data.get('password')
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user is None:
+                raise forms.ValidationError('Tên đăng nhập hoặc mật khẩu không chính xác.')
+            elif not user.is_active:
+                raise forms.ValidationError('Tài khoản của bạn đã bị khóa.')
+        return cleaned_data
 
 class UserProfileForm(forms.ModelForm):
     class Meta:

@@ -3,47 +3,79 @@
 {% block title %}Trang chủ - Hệ thống Quản lý Thư viện{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-        <h1 class="display-4 mb-4">Chào mừng đến với Thư viện</h1>
-        <p class="lead mb-4">Hệ thống quản lý thư viện hiện đại và thân thiện với người dùng.</p>
-        
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12 text-center mb-4">
+            {% if user.is_staff %}
+            <h1>Hệ thống Quản lý Thư viện</h1>
+            {% endif %}
         {% if user.is_authenticated %}
-            <div class="card mb-4">
+                {% if user.is_staff %}
+                <p class="lead">Chào mừng {{ user.first_name }} {{ user.last_name }} đến với hệ thống quản lý thư viện</p>
+                <div class="row mt-4">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Quản lý sách</h5>
+                                <p class="card-text">
+                                    <a href="{% url 'book_list' %}" class="btn btn-primary w-100">Quản lý sách</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Quản lý mượn trả</h5>
+                                <p class="card-text">
+                                    <a href="{% url 'borrow_list' %}" class="btn btn-primary w-100">Quản lý mượn trả</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Chào mừng trở lại, {{ user.username }}!</h5>
-                    <p class="card-text">Bạn có thể truy cập thông tin cá nhân và quản lý tài khoản của mình.</p>
-                    <a href="{% url 'profile' %}" class="btn btn-primary">
-                        <i class="fas fa-user me-1"></i>Xem thông tin cá nhân
-                    </a>
+                                <h5 class="card-title">Thống kê</h5>
+                                <p class="card-text">
+                                    <a href="{% url 'dashboard' %}" class="btn btn-primary w-100">Xem thống kê</a>
+                                </p>
+                            </div>
+                        </div>
                 </div>
             </div>
         {% else %}
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card mb-4">
+                <p class="lead" style="text-transform: uppercase; font-size: 2.0rem;">Chào mừng {{ user.first_name }} {{ user.last_name }} đến với thư viện của chúng tôi</p>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Đăng nhập</h5>
-                            <p class="card-text">Đã có tài khoản? Đăng nhập tại đây.</p>
-                            <a href="{% url 'login' %}" class="btn btn-primary">
-                                <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
-                            </a>
+                                <h5 class="card-title">Danh sách sách</h5>
+                                <p class="card-text">
+                                    <a href="{% url 'book_list' %}" class="btn btn-primary w-100">Xem danh sách sách</a>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Đăng ký</h5>
-                            <p class="card-text">Chưa có tài khoản? Đăng ký ngay.</p>
-                            <a href="{% url 'register' %}" class="btn btn-primary">
-                                <i class="fas fa-user-plus me-1"></i>Đăng ký
-                            </a>
+                {% endif %}
+            {% else %}
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h3 class="card-title">Chào mừng đến với thư viện của chúng tôi</h3>
+                                <p class="card-text">Đăng nhập để trải nghiệm các dịch vụ của thư viện</p>
+                                <div class="mt-4">
+                                    <a href="{% url 'login' %}" class="btn btn-primary me-2">Đăng nhập</a>
+                                    <a href="{% url 'register' %}" class="btn btn-outline-primary">Đăng ký</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+            {% endif %}
             </div>
-        {% endif %}
     </div>
 </div>
 {% endblock %} 

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>{% if user.is_staff %}Quản lý sách{% else %}Danh sách sách{% endif %}</h2>
+        </div>
+        {% if user.is_staff %}
+        <div class="col text-end">
+            <a href="{% url 'book_create' %}" class="btn btn-primary">Thêm sách mới</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    {{ search_form.search_query }}
+                </div>
+                <div class="col-md-4">
+                    {{ search_form.category }}
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for book in books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ book.author.name }}</h6>
+                    <p class="card-text">
+                        <small class="text-muted">Thể loại: {{ book.category.name }}</small><br>
+                        <small class="text-muted">Trạng thái: {{ book.get_status_display }}</small><br>
+                        <small class="text-muted">Số lượng: {{ book.available_copies }}/{{ book.total_copies }}</small>
+                    </p>
+                    {% if user.is_staff %}
+                    <div class="btn-group">
+                        <a href="{% url 'book_detail' book.pk %}" class="btn btn-info btn-sm">Chi tiết</a>
+                        <a href="{% url 'book_edit' book.pk %}" class="btn btn-warning btn-sm">Sửa</a>
+                        <a href="{% url 'book_delete' book.pk %}" class="btn btn-danger btn-sm">Xóa</a>
+                    </div>
+                    {% else %}
+                    {% if book.status == 'available' %}
+                    <a href="{% url 'borrow_create' book.pk %}" class="btn btn-primary btn-sm">
+                        Mượn sách
+                    </a>
+                    {% else %}
+                    <button class="btn btn-secondary btn-sm" disabled>Hết sách</button>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <p class="text-center">Không tìm thấy sách nào.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %} 

@@ -30,7 +30,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'users.middleware.AdminPasswordChangeMiddleware',
 ]
 
 ROOT_URLCONF = 'library_project.urls'
@@ -63,11 +62,11 @@ DATABASES = {
 # Internationalization
 LANGUAGE_CODE = 'vi'
 
-TIME_ZONE = 'Asia/Ha_Noi'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [

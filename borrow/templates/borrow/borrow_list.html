@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Danh sách mượn trả{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Danh sách Mượn Trả</h2>
+
+    {% if borrows %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover shadow-sm">
+            <thead class="bg-primary text-white">
+                <tr>
+                    {% if is_admin %}
+                    <th>STT</th>
+                    <th>Tên khách mượn</th>
+                    {% endif %}
+                    <th>Sách</th>
+                    <th>Ngày mượn</th>
+                    <th>Ngày trả dự kiến</th>
+                    <th>Ngày trả thực tế</th>
+                    <th>Trạng thái</th>
+                    {% if is_admin %}
+                    <th>Hành động</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for borrow in borrows %}
+                <tr>
+                    {% if is_admin %}
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ borrow.user.username }}</td>
+                    {% endif %}
+                    <td>{{ borrow.book.title }}</td>
+                    <td>{{ borrow.borrow_date }}</td>
+                    <td>{{ borrow.due_date }}</td>
+                    <td>{{ borrow.return_date|default:"Chưa trả" }}</td>
+                    <td>
+                        {% if borrow.status == 'pending' %}
+                        <span class="badge bg-warning">Chờ duyệt</span>
+                        {% elif borrow.status == 'approved' %}
+                        <span class="badge bg-success">Đã duyệt</span>
+                        {% elif borrow.status == 'returned' %}
+                        <span class="badge bg-info">Đã trả</span>
+                        {% elif borrow.status == 'rejected' %}
+                        <span class="badge bg-danger">Từ chối</span>
+                        {% endif %}
+                    </td>
+                    {% if is_admin %}
+                    <td>
+                        {% if borrow.status == 'pending' %}
+                        <a href="{% url 'borrow_approve' borrow.pk %}" class="btn btn-sm btn-success me-2">Duyệt</a>
+                        <a href="{% url 'borrow_reject' borrow.pk %}" class="btn btn-sm btn-danger">Từ chối</a>
+                        {% elif borrow.status == 'returned' %}
+                        <span class="text-muted">Đã trả</span>
+                        {% else %}
+                        <a href="{% url 'borrow_detail' borrow.pk %}" class="btn btn-sm btn-info">Chi tiết</a>
+                        {% endif %}
+                    </td>
+                    {% else %}
+                    <td>
+                        {% if borrow.status == 'approved' %}
+                        <a href="{% url 'return_book' borrow.pk %}" class="btn btn-sm btn-success">Trả sách</a>
+                        {% endif %}
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+        Bạn chưa có bản ghi mượn trả nào.
+    </div>
+    {% endif %}
+
+    {% comment %}
+    {% if not is_admin %}
+    <div class="mt-4">
+        <a href="{% url 'borrow_create' %}" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Yêu cầu mượn sách</a>
+    </div>
+    {% endif %}
+    {% endcomment %}
+</div>
+{% endblock %} 

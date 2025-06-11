@@ -26,18 +26,26 @@ def register_view(request):
     return render(request, 'users/register.html', {'form': form})
 
 def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+        
     if request.method == 'POST':
-        form = UserLoginForm(request.POST)
+        form = UserLoginForm(data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, LOGIN_SUCCESS)
-                return redirect('home')
-            else:
-                messages.error(request, LOGIN_ERROR)
+            user = form.get_user()
+            login(request, user)
+            messages.success(request, LOGIN_SUCCESS)
+            
+            # Kiểm tra nếu là superuser và mật khẩu mặc định
+            if user.is_superuser and user.check_password('admin123'):
+                messages.warning(request, 'Vui lòng đổi mật khẩu mặc định của tài khoản admin để bảo mật hệ thống.')
+
+            next_url = request.GET.get('next', 'home')
+            return redirect(next_url)
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = UserLoginForm()
     return render(request, 'users/login.html', {'form': form})

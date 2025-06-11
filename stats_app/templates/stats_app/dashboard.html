@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Thống kê hệ thống{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4">Thống kê Hệ thống Thư viện</h2>
+
+    <div class="row">
+        <!-- Thống kê sách -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-primary shadow-sm">
+                <div class="card-header">Sách</div>
+                <div class="card-body">
+                    <h5 class="card-title">Tổng số sách: {{ total_books }}</h5>
+                    <p class="card-text">Sách có sẵn: {{ available_books }}</p>
+                    <p class="card-text">Sách đã mượn: {{ borrowed_books }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thống kê người dùng -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-success shadow-sm">
+                <div class="card-header">Người dùng</div>
+                <div class="card-body">
+                    <h5 class="card-title">Tổng số người dùng: {{ total_users }}</h5>
+                    <p class="card-text">Người dùng đang mượn: {{ active_users }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thống kê mượn trả -->
+        <div class="col-md-4 mb-4">
+            <div class="card text-white bg-info shadow-sm">
+                <div class="card-header">Mượn trả</div>
+                <div class="card-body">
+                    <h5 class="card-title">Tổng số lượt mượn: {{ total_borrows }}</h5>
+                    <p class="card-text">Đang mượn: {{ current_borrows }}</p>
+                    <p class="card-text">Quá hạn: {{ overdue_borrows }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Thống kê theo thể loại -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">Sách theo thể loại</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for category in category_stats %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ category.category__name }}
+                            <span class="badge bg-primary rounded-pill">{{ category.total }}</span>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item">Không có dữ liệu thể loại.</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thống kê theo thời gian -->
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">Lượt mượn theo thời gian</div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Tuần này
+                            <span class="badge bg-primary rounded-pill">{{ weekly_borrows }}</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Tháng này
+                            <span class="badge bg-primary rounded-pill">{{ monthly_borrows }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
