@@ -61,8 +61,11 @@ def return_book(request, pk):
             return_record.borrow_record = borrow
             return_record.save()
             
-            # Cập nhật trạng thái mượn
-            borrow.status = 'returned'
+            # Cập nhật trạng thái mượn dựa trên ngày trả
+            if return_record.return_date and return_record.return_date > borrow.due_date:
+                borrow.status = 'overdue'
+            else:
+                borrow.status = 'returned'
             borrow.return_date = return_record.return_date
             borrow.save()
             
@@ -117,13 +120,6 @@ def borrow_reject(request, pk):
         borrow.status = 'rejected'
         borrow.save()
         
-        # Hoàn trả số lượng sách đã trừ khi yêu cầu mượn được tạo
-        book = borrow.book
-        book.available_copies += 1
-        if book.status == 'borrowed': # Nếu sách hết thì chuyển về có sẵn
-            book.status = 'available'
-        book.save()
-
         messages.warning(request, 'Yêu cầu mượn sách đã bị từ chối!')
     else:
         messages.error(request, 'Không thể từ chối yêu cầu mượn này.')

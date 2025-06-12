@@ -48,10 +48,6 @@
                             <li><a class="dropdown-item" href="{% url 'profile' %}">Thông tin cá nhân</a></li>
                             <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Chỉnh sửa thông tin</a></li>
                             <li><a class="dropdown-item" href="{% url 'change_password' %}">Đổi mật khẩu</a></li>
-                            {% if user.is_staff %}
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{% url 'admin:index' %}">Quản trị</a></li>
-                            {% endif %}
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="{% url 'logout' %}">Đăng xuất</a></li>
                         </ul>

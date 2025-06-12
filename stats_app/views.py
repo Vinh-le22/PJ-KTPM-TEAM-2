@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 from django.utils import timezone
 from datetime import timedelta
 from books.models import Book
@@ -18,15 +18,16 @@ def dashboard(request):
     borrowed_books = Book.objects.filter(status='borrowed').count()
     
     # Thống kê người dùng
-    total_users = User.objects.count()
-    active_users = BorrowRecord.objects.values('user').distinct().count()
+    total_users = User.objects.filter(is_staff=False).count()
     
     # Thống kê mượn trả
     total_borrows = BorrowRecord.objects.count()
     current_borrows = BorrowRecord.objects.filter(status='approved').count()
+    
+    # Thống kê các lượt mượn quá hạn (chưa trả hoặc đã trả nhưng muộn)
     overdue_borrows = BorrowRecord.objects.filter(
-        status='approved',
-        due_date__lt=timezone.now().date()
+        Q(status='overdue') | 
+        Q(status='approved', due_date__lt=timezone.now().date(), return_date__isnull=True)
     ).count()
     
     # Thống kê theo thể loại
@@ -52,7 +53,6 @@ def dashboard(request):
         'available_books': available_books,
         'borrowed_books': borrowed_books,
         'total_users': total_users,
-        'active_users': active_users,
         'total_borrows': total_borrows,
         'current_borrows': current_borrows,
         'overdue_borrows': overdue_borrows,

@@ -54,8 +54,6 @@
                         <a href="{% url 'borrow_reject' borrow.pk %}" class="btn btn-sm btn-danger">Từ chối</a>
                         {% elif borrow.status == 'returned' %}
                         <span class="text-muted">Đã trả</span>
-                        {% else %}
-                        <a href="{% url 'borrow_detail' borrow.pk %}" class="btn btn-sm btn-info">Chi tiết</a>
                         {% endif %}
                     </td>
                     {% else %}
